@@ -1,0 +1,173 @@
+
+\documentclass[twoside]{article}
+\usepackage{CJKutf8}
+
+%\usepackage{graphics}
+\usepackage{graphics}
+\usepackage{geometry}
+\usepackage{forest,amsmath}
+\usepackage{enumerate}
+\usepackage{url}
+\usepackage{latexsym,bm,amssymb}
+
+\geometry{left=2.5cm,right=2cm,top=2.5cm,bottom=2.5cm}
+
+%\setlength{\oddsidemargin}{0.25 in}
+%\setlength{\evensidemargin}{-0.25 in}
+%\setlength{\topmargin}{-0.6 in}
+%\setlength{\textwidth}{6.5 in}
+%\setlength{\textheight}{8.5 in}
+%\setlength{\headsep}{0.75 in}
+\setlength{\parindent}{0 in}
+\setlength{\parskip}{0.1 in}
+
+\usepackage{listings}
+\usepackage{color}
+\renewcommand\lstlistingname{Quelltext} % Change language of section name
+\lstset{ % General setup for the package
+    language= C,
+    %basicstyle=\small\sffamily,
+    basicstyle=\ttfamily,
+    numbers=left,
+     numberstyle=\tiny,
+    frame=tb,
+    tabsize=4,
+    columns=fixed,
+    showstringspaces=false,
+    showtabs=false,
+    keepspaces,
+    commentstyle=\color{red},
+    keywordstyle=\color{blue}
+}
+
+%
+% The following commands set up the lecnum (lecture number)
+% counter and make various numbering schemes work relative
+% to the lecture number.
+%
+%\newcounter{lecnum}
+%\renewcommand{\thepage}{\thelecnum-\arabic{page}}
+%\renewcommand{\thesection}{\thelecnum.\arabic{section}}
+%\renewcommand{\theequation}{\thelecnum.\arabic{equation}}
+%\renewcommand{\thefigure}{\thelecnum.\arabic{figure}}
+%\renewcommand{\thetable}{\thelecnum.\arabic{table}}
+
+%
+% The following macro is used to generate the header.
+%
+
+
+%
+
+
+%Use this command for a figure; it puts a figure in wherever you want it.
+%usage: 
+%\begin{figure}
+%\begin{center}
+%\includegraphics[width=5in]{fig-file}
+%\caption{}\label{fig:delavl}
+%\end{center}
+%\end{figure}
+
+%%% Use the following command for a table
+%%%
+
+% Use these for theorems, lemmas, proofs, etc.
+\newtheorem{theorem}{Theorem}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newenvironment{proof}{{\bf Proof:}}{\hfill\rule{2mm}{2mm}}
+
+% **** IF YOU WANT TO DEFINE ADDITIONAL MACROS FOR YOURSELF, PUT THEM HERE:
+
+\begin{document}
+\begin{CJK*}{UTF8}{gbsn}
+	%FILL IN THE RIGHT INFO.
+	%\lecture{**LECTURE-NUMBER**}{**DATE**}{**LECTURER**}{**SCRIBE**}
+	%\lecture{1}{Project Name}{Deshi Ye}{Student 1, Student 2, 学生3}
+	%\footnotetext{These notes are partially based on those of Nigel Mansell.}
+	\title{f-words}
+	\author{Liao Yucheng}
+	\maketitle
+	% **** YOUR NOTES GO HERE:
+
+	% Some general latex examples and examples making use of the
+	% macros follow.  
+	%**** IN GENERAL, BE BRIEF. LONG SCRIBE NOTES, NO MATTER HOW WELL WRITTEN,
+	%**** ARE NEVER READ BY ANYBODY.
+	\section{Introduction}
+
+	As far as we can see, one word is 16 bits in LC-3. We may call a word F-word if it contains 4 continuous \textbf{1}s. For example, these words are F-words:
+	\begin{itemize}
+		\item 1111 0000 0000 0000 
+		\item 0100 1001 1110 0011 
+		\item 1110 1110 1110 1111 
+		\item 1111 1111 1111 1111
+	\end{itemize}
+
+	On the contrary, these words are not F-words:
+	\begin{itemize}
+		\item 1110 0111 0011 1000 
+		\item 1010 1010 1010 1010 
+		\item 0000 0000 0000 0000
+	\end{itemize}
+
+	In this lab, you are required to write a program with LC-3 machine code to identify whether a word is F-word.
+
+	\section{Algorithm Specification}
+	The Lab can be easily completed by checking each continuous 4 bits. If the continuous 4 bits is 1111, then set the register R2 to 1.
+	
+	Firstly, to check each continuous 4 bits, we can use AND operator to take out continuous 4 bits. Then substract it with 1111. If the result is 0, it means the 4 bits in the original bit string is 1111.
+	
+	To get the standard 1111, the program initially set the value of R3 to be 1111B, then in the end of each loop we multiply the value with 2, which is the same as move one bit to the right.
+	
+	Because we need to check 13 kind continuous 4-bits, OR operator will be used, which will be completed by $ A \vee B = \overline{\overline{A} \wedge \overline{B}} $
+	
+
+	The peseudocode is follow:
+	\newpage
+	\begin{lstlisting}[mathescape=true]
+		initialize register
+		R0 $\leftarrow$ [x3100]
+		R1 $\leftarrow$ 13
+		R3 $\leftarrow$ 1111B
+		while R1!=0
+			R4 $\leftarrow$ R0 AND R3
+			R5 = R3 - R4
+			if R5 == 0
+				R5 $\leftarrow$ 1
+			else 
+				R5 $\leftarrow$ 0
+			R2 = R2 OR R5
+			R3 $\leftarrow$ R3 + R3
+			R1 $\leftarrow$ R1 - 1
+		end while
+		end
+
+	\end{lstlisting}
+
+	
+
+	\section{Q and A}
+	\begin{itemize}
+		\item 	Q: what is your algorithm
+		
+				A: the same as the algorithm in \textbf{Algorithm Specification}
+		\item	Q: why use OR operator rather than use break
+		
+				A: because break operator need to calculate the offset, so to simplify the coding procedure, I use OR rather than break.
+	\end{itemize}
+	
+
+	
+
+\end{CJK*}
+\end{document}
+
+
+
+
+

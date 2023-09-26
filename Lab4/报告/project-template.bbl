@@ -1,0 +1,12 @@
+\begin{thebibliography}{1}
+
+\bibitem{OleanderStemmingLibrary.org}
+\url{https://github.com/OleanderSoftware/OleanderStemmingLibrary/}.
+\newblock Accessed November 16, 2020.
+
+\bibitem{10.5555/1614191}
+T.~H. Cormen, C.~E. Leiserson, R.~L. Rivest, and C.~Stein.
+\newblock {\em Introduction to Algorithms, Third Edition}.
+\newblock The MIT Press, 3rd edition, 2009.
+
+\end{thebibliography}
